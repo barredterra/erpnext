@@ -3,30 +3,41 @@
 
 frappe.ui.form.on("Dunning", {
 	setup: function (frm) {
-		frm.set_query("sales_invoice", "overdue_payments", () => {
+		frm.set_query("sales_invoice", "overdue_payments", (doc) => {
 			return {
 				filters: {
 					docstatus: 1,
-					company: frm.doc.company,
-					customer: frm.doc.customer,
+					company: doc.company,
+					customer: doc.customer,
 					outstanding_amount: [">", 0],
 					status: "Overdue"
 				},
 			};
 		});
-		frm.set_query("income_account", () => {
+		frm.set_query("income_account", (doc) => {
 			return {
 				filters: {
-					company: frm.doc.company,
+					company: doc.company,
 					root_type: "Income",
-					is_group: 0
+					is_group: 0,
+					account_currency: get_currency_filter(doc.currency, doc.company),
 				}
 			};
 		});
-		frm.set_query("cost_center", () => {
+		frm.set_query("debit_to", (doc) => {
 			return {
 				filters: {
-					company: frm.doc.company,
+					company: doc.company,
+					account_type: "Receivable",
+					is_group: 0,
+					account_currency: get_currency_filter(doc.currency, doc.company),
+				}
+			}
+		});
+		frm.set_query("cost_center", (doc) => {
+			return {
+				filters: {
+					company: doc.company,
 					is_group: 0
 				}
 			};
@@ -272,3 +283,8 @@ frappe.ui.form.on("Overdue Payment", {
 		frm.trigger("calculate_totals");
 	}
 });
+
+function get_currency_filter(currency, company) {
+	const company_currency = erpnext.get_currency(company);
+	return currency === company_currency ? currency : ["in", [currency, company_currency]];
+}

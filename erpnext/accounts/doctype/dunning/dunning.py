@@ -18,10 +18,13 @@ from frappe import _
 from frappe.contacts.doctype.address.address import get_address_display
 from frappe.utils import getdate
 
+from erpnext import get_company_currency
+from erpnext.accounts.doctype.account.account import get_account_currency
 from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
 from erpnext.accounts.general_ledger import make_gl_entries, make_reverse_gl_entries
+from erpnext.accounts.party import get_party_account
 from erpnext.controllers.accounts_controller import AccountsController
 
 
@@ -38,9 +41,34 @@ class Dunning(AccountsController):
 		self.validate_totals()
 		self.set_party_details()
 		self.set_dunning_level()
+		self.validate_accounts()
 
+	def validate_accounts(self):
 		if not self.income_account:
 			self.income_account = frappe.db.get_value("Company", self.company, "default_income_account")
+
+		if not self.debit_to:
+			self.debit_to = get_party_account("Customer", self.customer, self.company)
+
+		company_currency = get_company_currency(self.company)
+
+		if self.income_account:
+			income_account_currency = get_account_currency(self.income_account)
+			if income_account_currency not in (company_currency, self.currency):
+				frappe.throw(
+					_(
+						"The currency of income account {} ({}) is different from the currency of this dunning ({})."
+					).format(self.income_account, income_account_currency, self.currency)
+				)
+
+		if self.debit_to:
+			debit_to_currency = get_account_currency(self.debit_to)
+			if debit_to_currency not in (company_currency, self.currency):
+				frappe.throw(
+					_(
+						"The currency of debit account {} ({}) is different from the currency of this dunning ({})."
+					).format(self.debit_to, debit_to_currency, self.currency)
+				)
 
 	def validate_same_currency(self):
 		"""
@@ -133,50 +161,49 @@ class Dunning(AccountsController):
 			make_reverse_gl_entries(voucher_type=self.doctype, voucher_no=self.name)
 
 	def make_gl_entries(self):
-		gl_entries = []
-		invoice_fields = self.get_invoice_fields()
-		inv_name = self.overdue_payments[0].sales_invoice
-		inv = frappe.db.get_value("Sales Invoice", inv_name, invoice_fields, as_dict=1)
+		if not self.dunning_amount:
+			return
 
-		dunning_in_company_currency = frappe.utils.flt(self.dunning_amount * inv.conversion_rate)
 		default_cost_center = frappe.get_cached_value("Company", self.company, "cost_center")
-		due_date = max([row.due_date for row in self.overdue_payments])
-
-		gl_entries.append(
-			self.get_gl_dict(
-				{
-					"account": inv.debit_to,
-					"party_type": "Customer",
-					"party": self.customer,
-					"due_date": due_date,
-					"against": self.income_account,
-					"debit": dunning_in_company_currency,
-					"debit_in_account_currency": self.dunning_amount,
-					"against_voucher": self.name,
-					"against_voucher_type": "Dunning",
-					"cost_center": inv.cost_center or default_cost_center,
-					"project": inv.project,
-				},
-				inv.party_account_currency,
-				item=inv,
-			)
-		)
-		gl_entries.append(
-			self.get_gl_dict(
-				{
-					"account": self.income_account,
-					"against": self.customer,
-					"credit": dunning_in_company_currency,
-					"cost_center": inv.cost_center or default_cost_center,
-					"credit_in_account_currency": self.dunning_amount,
-					"project": inv.project,
-				},
-				item=inv,
-			)
-		)
+		income_account_currency = get_account_currency(self.income_account)
+		debit_to_currency = get_account_currency(self.debit_to)
+		company_currency = get_company_currency(self.company)
 
 		make_gl_entries(
-			gl_entries, cancel=(self.docstatus == 2), update_outstanding="No", merge_entries=False
+			[
+				self.get_gl_dict(
+					{
+						"account": self.debit_to,
+						"party_type": "Customer",
+						"party": self.customer,
+						"due_date": max(row.due_date for row in self.overdue_payments),
+						"against": self.income_account,
+						"debit": self.base_dunning_amount
+						if debit_to_currency == company_currency
+						else self.dunning_amount,
+						"debit_in_account_currency": self.dunning_amount,
+						"against_voucher": self.name,
+						"against_voucher_type": "Dunning",
+						"cost_center": self.cost_center or default_cost_center,
+					},
+					debit_to_currency,
+				),
+				self.get_gl_dict(
+					{
+						"account": self.income_account,
+						"against": self.customer,
+						"credit": self.base_dunning_amount
+						if income_account_currency == company_currency
+						else self.dunning_amount,
+						"credit_in_account_currency": self.dunning_amount,
+						"cost_center": self.cost_center or default_cost_center,
+					},
+					income_account_currency,
+				),
+			],
+			cancel=(self.docstatus == 2),
+			update_outstanding="No",
+			merge_entries=False,
 		)
 
 	def get_invoice_fields(self):

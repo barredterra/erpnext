@@ -54,6 +54,7 @@
   "closing_text",
   "accounting_details_section",
   "income_account",
+  "debit_to",
   "column_break_48",
   "cost_center",
   "amended_from"
@@ -377,11 +378,17 @@
   {
    "fieldname": "column_break_48",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "debit_to",
+   "fieldtype": "Link",
+   "label": "Debit To",
+   "options": "Account"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-25 23:18:31.280753",
+ "modified": "2023-07-26 00:46:28.162633",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Dunning",
