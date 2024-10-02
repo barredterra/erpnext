@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-10-02 14:56:24.877554",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "code_list",
+  "context_alias"
+ ],
+ "fields": [
+  {
+   "fieldname": "code_list",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Code List",
+   "options": "Code List",
+   "reqd": 1
+  },
+  {
+   "fieldname": "context_alias",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Context Alias",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-10-02 14:57:33.836331",
+ "modified_by": "Administrator",
+ "module": "EDI",
+ "name": "Bound EDI Template Code Lists",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,158 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "prompt",
+ "creation": "2024-09-30 01:20:23.368052",
+ "description": "EDI templates allows you to create and manage jinja templates and bind them to a doctype for your Electronic Data Interchange needs.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "bound_doctype",
+  "status",
+  "column_break_stvp",
+  "is_standard",
+  "module",
+  "section_break_rxld",
+  "bindings_column",
+  "bound_code_lists",
+  "bound_common_codes",
+  "section_break_lvdn",
+  "template",
+  "validation_section",
+  "validation",
+  "schema"
+ ],
+ "fields": [
+  {
+   "fieldname": "bound_doctype",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bound Doctype",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "template",
+   "fieldtype": "Code",
+   "label": "Template",
+   "options": "Jinja"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nValidation\nProduction",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_standard",
+   "fieldtype": "Check",
+   "label": "Is Standard"
+  },
+  {
+   "depends_on": "is_standard",
+   "fieldname": "module",
+   "fieldtype": "Link",
+   "label": "Module",
+   "mandatory_depends_on": "is_standard",
+   "options": "Module Def"
+  },
+  {
+   "fieldname": "column_break_stvp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_lvdn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "is_standard",
+   "fieldname": "validation",
+   "fieldtype": "Code",
+   "label": "Validation",
+   "options": "XML"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "validation_section",
+   "fieldtype": "Section Break",
+   "label": "Validate"
+  },
+  {
+   "depends_on": "is_standard",
+   "fieldname": "schema",
+   "fieldtype": "Code",
+   "label": "Schema",
+   "options": "XML"
+  },
+  {
+   "description": "They are available under their alias in the rendering and parsing context.",
+   "fieldname": "bound_code_lists",
+   "fieldtype": "Table",
+   "label": "Bound Code Lists",
+   "options": "Bound EDI Template Code Lists"
+  },
+  {
+   "fieldname": "section_break_rxld",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "bindings_column",
+   "fieldtype": "Column Break",
+   "label": "Bindings"
+  },
+  {
+   "description": "Each link to a bound document will be replaced by an instance of this common code in the rendering context.",
+   "fieldname": "bound_common_codes",
+   "fieldtype": "Table",
+   "label": "Bound Common Codes",
+   "options": "Bound EDI Template Common Codes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "EDI Log",
+   "link_fieldname": "edi"
+  }
+ ],
+ "modified": "2024-10-02 15:41:46.771215",
+ "modified_by": "Administrator",
+ "module": "EDI",
+ "name": "EDI Template",
+ "naming_rule": "Set by user",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Yellow",
+   "title": "Draft"
+  },
+  {
+   "color": "Pink",
+   "title": "Validation"
+  },
+  {
+   "color": "Blue",
+   "title": "Production"
+  }
+ ],
+ "track_changes": 1
+}

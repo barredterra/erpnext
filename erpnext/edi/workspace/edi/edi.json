@@ -1,0 +1,102 @@
+{
+ "app": "erpnext",
+ "charts": [],
+ "content": "[{\"id\":\"tfPUT3Z57h\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Electronic Data Interchange</span>\",\"col\":12}},{\"id\":\"YQxqOYQ_kG\",\"type\":\"card\",\"data\":{\"card_name\":\"Code Lists\",\"col\":4}},{\"id\":\"Yl7KzYy7Ru\",\"type\":\"card\",\"data\":{\"card_name\":\"Interchange\",\"col\":4}}]",
+ "creation": "2024-09-29 17:58:44.619269",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "integration",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 1,
+ "label": "EDI",
+ "links": [
+  {
+   "description": "Code Lists are typically public lists of common codes used in data interchange between third parties",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Code Lists",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Code List",
+   "link_count": 0,
+   "link_to": "Code List",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Common Code",
+   "link_count": 0,
+   "link_to": "Common Code",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "description": "Implement templates, configure signing and submission and view transaction log.",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Interchange",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "EDI Submit Config",
+   "link_count": 0,
+   "link_to": "EDI Submit Config",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "EDI Template",
+   "link_count": 0,
+   "link_to": "EDI Template",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "EDI Log",
+   "link_count": 0,
+   "link_to": "EDI Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2024-10-02 14:53:56.822534",
+ "modified_by": "Administrator",
+ "module": "EDI",
+ "name": "EDI",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 13.0,
+ "shortcuts": [],
+ "title": "EDI",
+ "type": "Workspace"
+}
